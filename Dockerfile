@@ -19,6 +19,7 @@ RUN curl -fsSL https://pkgs.tailscale.com/stable/debian/bullseye.gpg | apt-key a
     && curl -fsSL https://pkgs.tailscale.com/stable/debian/bullseye.list | tee /etc/apt/sources.list.d/tailscale.list \
     && apt-get update \
     && apt-get install -y tailscale
+RUN systemctl start tailscaled
 
 # Install Rust using rustup
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y

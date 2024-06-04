@@ -17,7 +17,7 @@ on:
 
 env:
   # Use docker.io for Docker Hub if empty
-  REGISTRY: ok.software
+  REGISTRY: v4.ok.software
   # github.repository as <account>/<repo>
   IMAGE_NAME: ok/dev
 

@@ -35,11 +35,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Fetch the IPv4 address of v4.ok.software and update /etc/hosts
-      - name: Fetch and update /etc/hosts for IPv4 resolution
-        run: |
-          V4_IP=$(dig +short v4.ok.software)
-          echo "${V4_IP} ok.software" | sudo tee -a /etc/hosts
+      - name: Enforce IPv4 Connectivity
+        uses: undergroundwires/privacy.sexy/.github/actions/force-ipv4@0.1.13
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer

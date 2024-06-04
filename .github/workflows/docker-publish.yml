@@ -7,7 +7,7 @@ name: Docker
 
 on:
   schedule:
-    - cron: '36 1 * * *'
+    - cron: '34 20 * * *'
   push:
     branches: [ "main" ]
     # Publish semver tags as releases.
@@ -17,12 +17,14 @@ on:
 
 env:
   # Use docker.io for Docker Hub if empty
-  REGISTRY: ok.software
+  REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ok/dev
+  IMAGE_NAME: ${{ github.repository }}
+
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -34,9 +36,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Enforce IPv4 Connectivity
-        uses: undergroundwires/privacy.sexy/.github/actions/force-ipv4@9e34e644493674ca709b64a47206763d5d4bd60c # v0.1.13
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -59,8 +58,8 @@ jobs:
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
           registry: ${{ env.REGISTRY }}
-          username: sevki
-          password: ${{ secrets.REGISTRY_TOKEN }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -81,8 +80,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max 
-          network: host
+          cache-to: type=gha,mode=max
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker

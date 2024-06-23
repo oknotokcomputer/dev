@@ -1,6 +1,4 @@
-ARG VARIANT "bookworm-20240612"
-
-FROM debian:${VARIANT}
+FROM debian:bookworm-20240612
 
 RUN apt-get update && apt-get install -y \
     sudo \
